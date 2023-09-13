@@ -24,11 +24,9 @@ namespace FormInputBarang
                     try
                     {
                         string response = await client.GetStringAsync(apiUrl);
-                        
                     }
                     catch (HttpRequestException ex)
                     {
-                        
                         MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
@@ -38,7 +36,7 @@ namespace FormInputBarang
         private async void PelabuhanTextBox_TextChanged(object sender, EventArgs e)
         {
             string userInput = PelabuhanTextBox.Text;
-            string kdNegara = GetKodeNegara(namaNegara); 
+            string kdNegara = null
             if (userInput.Length >= 3 && !string.IsNullOrEmpty(kdNegara))
             {
                 string apiUrl = $"https://insw-dev.ilcs.co.id/n/pelabuhan?kd_negara={kdNegara}&ur_pelabuhan={userInput}";
@@ -48,11 +46,9 @@ namespace FormInputBarang
                     try
                     {
                         string response = await client.GetStringAsync(apiUrl);
-                        
                     }
                     catch (HttpRequestException ex)
                     {
-                        
                         MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
@@ -74,12 +70,9 @@ namespace FormInputBarang
                         string previewResponse = await client.GetStringAsync(previewUrl);
                         string tarifResponse = await client.GetStringAsync(tarifUrl);
 
-                        
 
-                        
                         float tarifBeaMasuk = ParseTarifResponse(tarifResponse);
 
-                        
                         float harga;
                         if (float.TryParse(HargaTextBox.Text, out harga))
                         {
@@ -89,50 +82,9 @@ namespace FormInputBarang
                     }
                     catch (HttpRequestException ex)
                     {
-                        
                         MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
         }
 
-        
-        private float ParseTarifResponse(string tarifResponse)
-        {
-            string apiUrl = $"https://insw-dev.ilcs.co.id/n/tarif?hs_code={tarifResponse}";
-            using (HttpClient client = new HttpClient())
-                {
-                    try
-                    {
-                        string response = await client.GetStringAsync(apiUrl);
-                        string tarifData = response.tarif;
-                        return tarifData;
-                    }
-                    catch (HttpRequestException ex)
-                    {
-                    
-                        MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return null; 
-                    }
-        }
-
-        
-        private async Task<string> GetKodeNegara(string namaNegara)
-        {
-            string apiUrl = $"https://insw-dev.ilcs.co.id/n/negara?ur_negara={namaNegara}";
-            using (HttpClient client = new HttpClient())
-                {
-                    try
-                    {
-                        string response = await client.GetStringAsync(apiUrl);
-                        string kdNegara = response.kd_negara;
-                        return kdNegara;
-                    }
-                    catch (HttpRequestException ex)
-                    {
-                    
-                        MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return null; 
-                    }
-                }
-        }
